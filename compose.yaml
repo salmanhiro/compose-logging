@@ -31,7 +31,7 @@ services:
     image: mongo
 
   logging_backend:
-    image: ubuntu:latest
+    image: node:latest
     volumes:
       - ./logs/backend:/logs
       - ./scripts:/scripts
@@ -45,15 +45,15 @@ services:
     command: /bin/bash -c "apt update && apt install -y docker-compose && /scripts/logging.sh $SERVICE_NAME $LOG_FILE $BACKEND_PORT"
 
   logging_web:
-    image: ubuntu:latest
-    volumes:
-      - ./logs/web:/logs
-      - ./scripts:/scripts
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      SERVICE_NAME: web
-      LOG_FILE: /logs/web.log
-      WEB_PORT: 9002
-    ports:
-      - "9002:9002"
-    command: /bin/bash -c "apt update && apt install -y docker-compose && /scripts/logging.sh $SERVICE_NAME $LOG_FILE $WEB_PORT"
+      image: node:latest
+      volumes:
+        - ./logs/web:/logs
+        - ./scripts:/scripts
+        - /var/run/docker.sock:/var/run/docker.sock
+      environment:
+        SERVICE_NAME: web
+        LOG_FILE: /logs/web.log
+        WEB_PORT: 9002
+      ports:
+        - "9002:9002"
+      command: /bin/bash -c "apt update && apt install -y docker-compose && /scripts/logging.sh $SERVICE_NAME $LOG_FILE $WEB_PORT"
